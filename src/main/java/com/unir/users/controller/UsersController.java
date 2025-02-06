@@ -20,53 +20,57 @@ import java.util.Map;
 
 
 public class UsersController {
-   private final UsersService usersService;
+    private final UsersService usersService;
 
-   @GetMapping("/users")
+    @GetMapping("/users")
 
-    public ResponseEntity<List<User> >getUsers(@RequestHeader Map<String, String> headers){
+    public ResponseEntity<List<User>> getUsers(@RequestHeader Map<String, String> headers) {
         log.info("headers: {}", headers);
         List<User> users = usersService.getUsers();
-        if(users == null){
+        if (users == null) {
             return ResponseEntity.ok(Collections.emptyList());
-        }else {
+        } else {
             return ResponseEntity.ok(users);
         }
     }
+
     @GetMapping("/users/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable Long userId){
+    public ResponseEntity<User> getUser(@PathVariable Long userId) {
         log.info("Solicitud de recepción de un usuario{}", userId);
         User user = usersService.getUser(String.valueOf(userId));
-        if(user == null){
+        if (user == null) {
             return ResponseEntity.notFound().build();
-        }else {
+        } else {
             return ResponseEntity.ok(user);
         }
     }
-    @DeleteMapping ("/users/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId){
-        Boolean removed= usersService.deleteUser(userId);
-        if(Boolean.TRUE.equals(removed)){
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        Boolean removed = usersService.deleteUser(userId);
+        if (Boolean.TRUE.equals(removed)) {
             return ResponseEntity.ok().build();
-        }else {
+        } else {
             return ResponseEntity.notFound().build();
         }
-            }
+    }
+
     @PostMapping("/users")
-    public ResponseEntity<User> addUser(@RequestBody CreateUserRequest request){
+    public ResponseEntity<User> addUser(@RequestBody CreateUserRequest request) {
         User newUser = usersService.addUser(request);
-        if(newUser == null){
+        if (newUser == null) {
             return ResponseEntity.badRequest().build();
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
         }
     }
+
     @PutMapping("/users/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody CreateUserRequest request){
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody CreateUserRequest request) {
         User updatedUser = usersService.updateUser(userId, request);
-        if(updatedUser == null){
+        if (updatedUser == null) {
             return ResponseEntity.badRequest().build();
-        }else {
+        } else {
             return ResponseEntity.ok(updatedUser);
         }
     }
